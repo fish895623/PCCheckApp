@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
@@ -13,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
   Button bt;
   NotificationManager manager;
   NotificationCompat.Builder builder;
+  EditText editText;
+
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
 
@@ -24,13 +27,17 @@ public class MainActivity extends AppCompatActivity {
 
     bt = findViewById(R.id.bt);
     // Show Notification
-    bt.setOnClickListener(v -> pingNotification());
+    bt.setOnClickListener(v -> {
+      btn_Click();
+      pingNotification();
+    });
   }
 
   // Notification
   public void pingNotification() {
     builder = null;
     manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       manager.createNotificationChannel(
               new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
@@ -44,10 +51,14 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText("메세지");
+            .setContentText(editText.getText());
 
     Notification notification = builder.build();
 
     manager.notify(1, notification);
+  }
+
+  public void btn_Click() {
+    editText = findViewById(R.id.EditText);
   }
 }
