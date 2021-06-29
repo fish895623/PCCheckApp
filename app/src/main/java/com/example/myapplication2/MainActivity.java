@@ -5,10 +5,18 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
@@ -24,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
 
     bt = findViewById(R.id.bt);
     // Show Notification
@@ -48,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
       //noinspection deprecation
       builder = new NotificationCompat.Builder(this);
     }
+
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(editText.getText());
+            .setContentText(socketCheck("192.168.0.2", 3389, 1000));
 
     Notification notification = builder.build();
 
@@ -60,5 +72,16 @@ public class MainActivity extends AppCompatActivity {
 
   public void btn_Click() {
     editText = findViewById(R.id.EditText);
+  }
+
+  public static String socketCheck(String hostname, int port, int timeout) {
+    SocketAddress socketAddress = new InetSocketAddress(hostname, port);
+
+    try (Socket socket = new Socket()) {
+      socket.connect(socketAddress, timeout);
+      return "ALIVE";
+    } catch (IOException e) {
+      return "DEAD";
+    }
   }
 }
