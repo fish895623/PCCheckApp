@@ -42,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
     checkBox = findViewById(R.id.checkBox);
     checkBox.setOnClickListener(v -> System.out.println("HELLO\n" + checkBox.isChecked()));
 
-    bt = findViewById(R.id.bt);
     // Show Notification
+    bt = findViewById(R.id.bt);
     bt.setOnClickListener(v -> {
       btn_Click();
       pingNotification();
     });
   }
 
-  // Notification
+  // Notification 알림
   public void pingNotification() {
     builder = null;
     manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(socketCheck("192.168.0.2", 3389, 1000))
+            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
             .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
@@ -77,10 +77,13 @@ public class MainActivity extends AppCompatActivity {
     manager.notify(1, notification);
   }
 
-  public void btn_Click() {
+  // 텍스트의 데이터 부르기
+  public String btn_Click() {
     editText = findViewById(R.id.EditText);
+    return editText.getText().toString();
   }
 
+  // Socket 통신
   public static String socketCheck(String hostname, int port, int timeout) {
     SocketAddress socketAddress = new InetSocketAddress(hostname, port);
 
