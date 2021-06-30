@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -15,16 +16,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
-  boolean bt_bool = false;
   NotificationManager manager;
   NotificationCompat.Builder builder;
   EditText editText;
+  CheckBox checkBox;
 
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
@@ -39,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     // 소켓통신을 하려면 필요함
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
+
+    // 체크박스 확인
+    checkBox = findViewById(R.id.checkBox);
+    checkBox.setOnClickListener(v -> System.out.println("HELLO\n" + checkBox.isChecked()));
 
     bt = findViewById(R.id.bt);
     // Show Notification
