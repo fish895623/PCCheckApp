@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
@@ -38,16 +39,9 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
-    // 체크박스 확인
-    checkBox = findViewById(R.id.checkBox);
-    checkBox.setOnClickListener(v -> System.out.println("HELLO\n" + checkBox.isChecked()));
-
     // Show Notification
     bt = findViewById(R.id.bt);
-    bt.setOnClickListener(v -> {
-      btn_Click();
-      pingNotification();
-    });
+    bt.setOnClickListener(v -> pingNotification());
   }
 
   // Notification 알림
