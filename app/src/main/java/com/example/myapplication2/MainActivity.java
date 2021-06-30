@@ -17,9 +17,11 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
+  boolean bt_bool = false;
   NotificationManager manager;
   NotificationCompat.Builder builder;
   EditText editText;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // To Socket communication need this
+    // 소켓통신을 하려면 필요함
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
@@ -63,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(socketCheck("192.168.0.2", 3389, 1000));
+            .setContentText(socketCheck("192.168.0.2", 3389, 1000))
+            .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
 
