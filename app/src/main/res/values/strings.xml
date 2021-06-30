@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My Application2</string>
+    <string name="powerCheck">CheckBox</string>
 </resources>
