@@ -3,9 +3,7 @@ package com.example.myapplication2;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.StrictMode;
+import android.os.*;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
   NotificationCompat.Builder builder;
   EditText editText;
   CheckBox checkBox;
+  Handler handler;
 
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
@@ -39,9 +38,21 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
+    // 핸들러
+    handler = new Handler(Looper.getMainLooper());
+
     // Show Notification
     bt = findViewById(R.id.bt);
     bt.setOnClickListener(v -> pingNotification());
+
+    // use Checkbox to communicate
+    checkBox = findViewById(R.id.checkBox);
+    checkBox.setOnClickListener(v -> {
+      if (checkBox.isChecked()) {
+        ExThread thread = new ExThread();
+        handler.post(thread);
+      }
+    });
   }
 
   // Notification 알림
@@ -86,6 +97,23 @@ public class MainActivity extends AppCompatActivity {
       return "ALIVE";
     } catch (IOException e) {
       return "DEAD";
+    }
+  }
+
+  class ExThread extends Thread {
+    public void run() {
+      if (currentThread().isAlive()) {
+
+        System.out.println("alive");
+      } else {
+        System.out.println("dead");
+      }
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      handler.post(this);
     }
   }
 }

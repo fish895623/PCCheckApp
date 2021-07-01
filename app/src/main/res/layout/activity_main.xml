@@ -35,6 +35,10 @@
                     android:autofillHints="" android:importantForAutofill="no"
                     tools:layout_editor_absoluteX="30dp" tools:layout_editor_absoluteY="16dp" android:layout_weight="1"
                     android:layout_height="match_parent"/>
+            <CheckBox
+                    android:text="@string/checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/checkBox" android:layout_weight="1"/>
             <Button
                     tools:ignore="HardcodedText"
                     android:text="노티피케이션 발생시키기"
