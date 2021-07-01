@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,14 +15,21 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.*;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
+  Button bt2;
   NotificationManager manager;
   NotificationCompat.Builder builder;
   EditText editText;
   CheckBox checkBox;
   Handler handler;
+  Thread thread;
+
+  boolean isThread = false;
 
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
@@ -37,20 +45,25 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
-    // 핸들러
-    handler = new Handler(Looper.getMainLooper());
-
     // Show Notification
     bt = findViewById(R.id.bt);
-    bt.setOnClickListener(v -> pingNotification());
+    bt.setOnClickListener(v -> isThread = false);
 
-    // use Checkbox to communicate
-    checkBox = findViewById(R.id.checkBox);
-    checkBox.setOnClickListener(v -> {
-      if (checkBox.isChecked()) {
-        ExThread thread = new ExThread(this);
-        handler.post(thread);
-      }
+    bt2 = findViewById(R.id.bt2);
+    bt2.setOnClickListener(v -> {
+      isThread = true;
+      thread = new Thread(() -> {
+        while (isThread) {
+          System.out.println("Works!");
+          pingNotification();
+          try {
+            TimeUnit.SECONDS.sleep(3);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      thread.start();
     });
   }
 
@@ -73,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
+//            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
+            .setContentText(socketCheck("192.168.0.2", 3389, 10000))
             .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
@@ -98,5 +112,4 @@ public class MainActivity extends AppCompatActivity {
       return "DEAD";
     }
   }
-
 }
