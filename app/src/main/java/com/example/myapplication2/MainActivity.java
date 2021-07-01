@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     checkBox = findViewById(R.id.checkBox);
     checkBox.setOnClickListener(v -> {
       if (checkBox.isChecked()) {
-        ExThread thread = new ExThread();
+        ExThread thread = new ExThread(this);
         handler.post(thread);
       }
     });
@@ -100,20 +99,4 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  class ExThread extends Thread {
-    public void run() {
-      if (currentThread().isAlive()) {
-
-        System.out.println("alive");
-      } else {
-        System.out.println("dead");
-      }
-      try {
-        Thread.sleep(2000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      handler.post(this);
-    }
-  }
 }
