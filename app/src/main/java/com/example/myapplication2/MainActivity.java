@@ -3,10 +3,9 @@ package com.example.myapplication2;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.StrictMode;
+import android.os.*;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -15,16 +14,15 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
-  boolean bt_bool = false;
   NotificationManager manager;
   NotificationCompat.Builder builder;
   EditText editText;
+  CheckBox checkBox;
+  Handler handler;
 
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
@@ -40,15 +38,24 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
-    bt = findViewById(R.id.bt);
+    // 핸들러
+    handler = new Handler(Looper.getMainLooper());
+
     // Show Notification
-    bt.setOnClickListener(v -> {
-      btn_Click();
-      pingNotification();
+    bt = findViewById(R.id.bt);
+    bt.setOnClickListener(v -> pingNotification());
+
+    // use Checkbox to communicate
+    checkBox = findViewById(R.id.checkBox);
+    checkBox.setOnClickListener(v -> {
+      if (checkBox.isChecked()) {
+        ExThread thread = new ExThread();
+        handler.post(thread);
+      }
     });
   }
 
-  // Notification
+  // Notification 알림
   public void pingNotification() {
     builder = null;
     manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -67,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(socketCheck("192.168.0.2", 3389, 1000))
+            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
             .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
@@ -75,10 +82,13 @@ public class MainActivity extends AppCompatActivity {
     manager.notify(1, notification);
   }
 
-  public void btn_Click() {
+  // 텍스트의 데이터 부르기
+  public String btn_Click() {
     editText = findViewById(R.id.EditText);
+    return editText.getText().toString();
   }
 
+  // Socket 통신
   public static String socketCheck(String hostname, int port, int timeout) {
     SocketAddress socketAddress = new InetSocketAddress(hostname, port);
 
@@ -87,6 +97,23 @@ public class MainActivity extends AppCompatActivity {
       return "ALIVE";
     } catch (IOException e) {
       return "DEAD";
+    }
+  }
+
+  class ExThread extends Thread {
+    public void run() {
+      if (currentThread().isAlive()) {
+
+        System.out.println("alive");
+      } else {
+        System.out.println("dead");
+      }
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      handler.post(this);
     }
   }
 }

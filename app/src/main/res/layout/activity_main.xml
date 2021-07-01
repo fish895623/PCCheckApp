@@ -9,25 +9,50 @@
                   android:orientation="vertical" android:id="@+id/linearLayout"
                   app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                   app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent">
-        <EditText
-                tools:ignore="HardcodedText,LabelFor"
-                android:id="@+id/EditText"
-                android:layout_width="fill_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:autofillHints="" android:importantForAutofill="no"
-                tools:layout_editor_absoluteX="30dp" tools:layout_editor_absoluteY="16dp" android:layout_weight="5"
-                android:layout_height="wrap_content"/>
-        <CheckBox
-                android:text="@string/powerCheck"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/checkBox" android:layout_weight="1"/>
+                android:layout_height="wrap_content" android:layout_weight="1">
+
+            <EditText
+                    tools:ignore="HardcodedText,LabelFor,NestedWeights"
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:autofillHints=""
+                    android:importantForAutofill="no"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="16dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            <EditText
+                    tools:ignore="HardcodedText,LabelFor"
+                    android:id="@+id/EditText"
+                    android:layout_width="match_parent"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:autofillHints="" android:importantForAutofill="no"
+                    tools:layout_editor_absoluteX="30dp" tools:layout_editor_absoluteY="16dp" android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+            <CheckBox
+                    android:text="@string/checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/checkBox" android:layout_weight="1"/>
+            <Button
+                    tools:ignore="HardcodedText"
+                    android:text="노티피케이션 발생시키기"
+                    android:layout_width="match_parent"
+                    android:id="@+id/bt2"
+                    tools:layout_editor_absoluteY="117dp" tools:layout_editor_absoluteX="39dp" android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
         <Button
                 tools:ignore="HardcodedText"
                 android:text="노티피케이션 발생시키기"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:id="@+id/bt"
-                tools:layout_editor_absoluteY="117dp" tools:layout_editor_absoluteX="39dp" android:layout_weight="5"
+                tools:layout_editor_absoluteY="117dp" tools:layout_editor_absoluteX="39dp" android:layout_weight="40"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
 
