@@ -1,6 +1,5 @@
 package com.example.myapplication2;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,8 +15,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.TimeUnit;
-
-import static java.lang.Thread.*;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.main_activity);
 
     // To Socket communication need this
     // 소켓통신을 하려면 필요함
