@@ -18,11 +18,15 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
   Button bt;
+  Button bt2;
   NotificationManager manager;
   NotificationCompat.Builder builder;
   EditText editText;
   CheckBox checkBox;
   Handler handler;
+  Thread thread;
+
+  boolean isThread = false;
 
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
@@ -31,27 +35,32 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.main_activity);
 
     // To Socket communication need this
     // 소켓통신을 하려면 필요함
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
-    // 핸들러
-    handler = new Handler(Looper.getMainLooper());
-
     // Show Notification
     bt = findViewById(R.id.bt);
-    bt.setOnClickListener(v -> pingNotification());
+    bt.setOnClickListener(v -> isThread = false);
 
-    // use Checkbox to communicate
-    checkBox = findViewById(R.id.checkBox);
-    checkBox.setOnClickListener(v -> {
-      if (checkBox.isChecked()) {
-        ExThread thread = new ExThread();
-        handler.post(thread);
-      }
+    bt2 = findViewById(R.id.bt2);
+    bt2.setOnClickListener(v -> {
+      isThread = true;
+      thread = new Thread(() -> {
+        while (isThread) {
+          System.out.println("Works!");
+          pingNotification();
+          try {
+            TimeUnit.SECONDS.sleep(3);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      thread.start();
     });
   }
 
@@ -74,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
     builder
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("알림")
-            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
+//            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
+            .setContentText(socketCheck("192.168.0.2", 3389, 10000))
             .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
@@ -97,23 +107,6 @@ public class MainActivity extends AppCompatActivity {
       return "ALIVE";
     } catch (IOException e) {
       return "DEAD";
-    }
-  }
-
-  class ExThread extends Thread {
-    public void run() {
-      if (currentThread().isAlive()) {
-
-        System.out.println("alive");
-      } else {
-        System.out.println("dead");
-      }
-      try {
-        Thread.sleep(2000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      handler.post(this);
     }
   }
 }
