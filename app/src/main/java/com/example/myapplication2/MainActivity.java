@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       manager.createNotificationChannel(
-              new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+              new NotificationChannel(
+                      channelID, channelName,
+                      NotificationManager.IMPORTANCE_LOW) // Muted
       );
       builder = new NotificationCompat.Builder(this, channelID);
     } else {
