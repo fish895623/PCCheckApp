@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
   private static final String channelID = "channel1";
   private static final String channelName = "Channel1";
 
+  private AppBarConfiguration mAppBarConfiguration;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     // 소켓통신을 하려면 필요함
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
+
+
 
     // Show Notification
     bt = findViewById(R.id.bt);
