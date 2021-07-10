@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
               isThread = true;
               thread = new Thread(() -> {
                 while (isThread) {
-                  System.out.println("Works!");
+                  System.out.println("aaa!");
                   pingNotification();
                   try {
                     TimeUnit.SECONDS.sleep(3);
