@@ -17,14 +17,11 @@ import java.net.SocketAddress;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-  Button bt;
-  Button bt2;
-  NotificationManager manager;
-  NotificationCompat.Builder builder;
-  EditText editText;
-  CheckBox checkBox;
-  Handler handler;
-  Thread thread;
+  private NotificationManager manager;
+  private NotificationCompat.Builder builder;
+  private EditText editText;
+  private Handler handler;
+  private Thread thread;
 
   boolean isThread = false;
 
@@ -43,25 +40,25 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.setThreadPolicy(policy);
 
     // Show Notification
-    bt = findViewById(R.id.bt);
-    bt.setOnClickListener(v -> isThread = false);
+    findViewById(R.id.bt)
+            .setOnClickListener(v -> isThread = false);
 
-    bt2 = findViewById(R.id.bt2);
-    bt2.setOnClickListener(v -> {
-      isThread = true;
-      thread = new Thread(() -> {
-        while (isThread) {
-          System.out.println("Works!");
-          pingNotification();
-          try {
-            TimeUnit.SECONDS.sleep(3);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      });
-      thread.start();
-    });
+    findViewById(R.id.bt2)
+            .setOnClickListener(v -> {
+              isThread = true;
+              thread = new Thread(() -> {
+                while (isThread) {
+                  System.out.println("Works!");
+                  pingNotification();
+                  try {
+                    TimeUnit.SECONDS.sleep(3);
+                  } catch (InterruptedException e) {
+                    e.printStackTrace();
+                  }
+                }
+              });
+              thread.start();
+            });
   }
 
   // Notification 알림
