@@ -10,7 +10,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.navigation.ui.AppBarConfiguration;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -44,28 +43,29 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
 
-
-
     // Show Notification
     bt = findViewById(R.id.bt);
     bt.setOnClickListener(v -> isThread = false);
 
     bt2 = findViewById(R.id.bt2);
-    bt2.setOnClickListener(v -> {
-      isThread = true;
-      thread = new Thread(() -> {
-        while (isThread) {
-          System.out.println("Works!");
-          pingNotification();
-          try {
-            TimeUnit.SECONDS.sleep(3);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      });
-      thread.start();
-    });
+    bt2.setOnClickListener(
+        v -> {
+          isThread = true;
+          thread =
+              new Thread(
+                  () -> {
+                    while (isThread) {
+                      System.out.println("Works!");
+                      pingNotification();
+                      try {
+                        TimeUnit.SECONDS.sleep(3);
+                      } catch (InterruptedException e) {
+                        e.printStackTrace();
+                      }
+                    }
+                  });
+          thread.start();
+        });
   }
 
   // Notification 알림
@@ -75,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       manager.createNotificationChannel(
-              new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-      );
+          new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT));
       builder = new NotificationCompat.Builder(this, channelID);
     } else {
       // Under SDK version 26
@@ -85,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     builder
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("알림")
-//            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
-            .setContentText(socketCheck("192.168.0.2", 3389, 10000))
-            .setOngoing(true); // 알림 고정
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("알림")
+        //            .setContentText(socketCheck(this.btn_Click(), 3389, 10000))
+        .setContentText(socketCheck("192.168.0.2", 3389, 10000))
+        .setOngoing(true); // 알림 고정
 
     Notification notification = builder.build();
 
